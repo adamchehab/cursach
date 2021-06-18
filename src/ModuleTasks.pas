@@ -4,21 +4,21 @@ Interface
 uses Objects, Drivers, Dialogs;
 
 const
-  ShowTask = 1000;
+  ShowTask =  1000;
   cmConvert = 1001;
-  cmRub = 1002;
-  cmDollar = 1003;
-  cmEuro = 1004;
-  cmExit = 1005;
+  cmRUB =     1002;
+  cmUSD =     1003;
+  cmLBP =     1004;
+  cmExit =    1005;
   
   // курс валют (можно float)
-  Dollar = 73;
-  Euro = 89;
+  USD =  72.39;
+  LBP =  0.047;
 
 type
   PTaskDialog = ^TTaskDialog;
   TTaskDialog = object(TDialog)
-    sIn, sOutRub, sOutDollar, sOutEuro, sCurrency: PInputLine;
+    sIn, sOutRUB, sOutUSD, sOutLBP, sCurrency: PInputLine;
     constructor Init();
     procedure HandleEvent(var Event : TEvent); virtual;
   private
@@ -35,11 +35,11 @@ begin
   begin
     case Event.Command of
       // задаем текущюю валюту
-      cmRub: begin currency:='Rubble'; sCurrency^.SetData(currency); end;
-      cmDollar: begin currency:='Dollar'; sCurrency^.SetData(currency); end;
-      cmEuro: begin currency:='Euro'; sCurrency^.SetData(currency); end;
-      cmConvert : begin Action; sCurrency^.SetData(currency); end;
-      cmExit : Close;
+      cmRUB:      begin currency:='RUB'; sCurrency^.SetData(currency); end;
+      cmUSD:      begin currency:='USD'; sCurrency^.SetData(currency); end;
+      cmLBP:      begin currency:='LBP'; sCurrency^.SetData(currency); end;
+      cmConvert:  begin Action; sCurrency^.SetData(currency); end;
+      cmExit:     Close;
     end;
     ClearEvent(Event);
   end;
@@ -51,49 +51,49 @@ var
 begin
   // 4 числа тк 2 - коорд верхней левой точки
   // куда вставляем
-  R.Assign(15, 5, 75, 20);
+  R.Assign(15, 5, 73, 18);
   // что мы вставляем
-  inherited Init(R, 'Task');
+  inherited Init(R, 'CONVERTER');
   // Зеленые кнопки слева создаем
-  R.Assign(3,3,14,5);
-  Insert(New(PButton, Init(R, 'Rubble', cmRub, bfNormal)));
-  R.Assign(3,6,14,8);
-  Insert(New(PButton, Init(R, 'Dollar', cmDollar, bfNormal)));
-  R.Assign(3,9,14,11);
-  Insert(New(PButton, Init(R, 'Euro', cmEuro, bfNormal)));
+  R.Assign(6, 3, 15, 5);
+  Insert(New(PButton, Init(R, 'RUB', cmRUB, bfNormal)));
+  R.Assign(6, 5, 15, 7);
+  Insert(New(PButton, Init(R, 'USD', cmUSD, bfNormal)));
+  R.Assign(6, 7, 15, 9);
+  Insert(New(PButton, Init(R, 'LBP', cmLBP, bfNormal)));
   
-  R.Assign(18, 3, 37,4);
-  Insert(New(PStaticText, Init(R, 'Input amount')));
-  R.Assign(18, 5, 27,6);
+  R.Assign(18, 3, 37, 4);
+  Insert(New(PStaticText, Init(R, 'Current:')));
+  R.Assign(28, 5, 34, 6);
   sCurrency:=New(PInputLine, Init(R, 15));
   Insert(sCurrency);
-  currency:='Rubble';
+  currency:='RUB';
   sCurrency^.SetData(currency);
   
-  R.Assign(18,7,27,8);
+  R.Assign(18, 5, 27, 6);
   sIn := New(PInputLine, Init(R, 15));
   Insert(sIn);
   
-  R.Assign(35, 3, 42,4);
-  Insert(New(PStaticText, Init(R, 'Rubble:')));
-  R.Assign(43,3,55,4);
-  sOutRub := New(PInputLine, Init(R, 15));
-  Insert(sOutRub);
-  R.Assign(35, 5, 42,6);
-  Insert(New(PStaticText, Init(R, 'Dollar:')));
-  R.Assign(43,5,55,6);
-  sOutDollar := New(PInputLine, Init(R, 15));
-  Insert(sOutDollar);
-  R.Assign(35, 7, 42,8);
-  Insert(New(PStaticText, Init(R, 'Euro:')));
-  R.Assign(43,7,55,8);
-  sOutEuro := New(PInputLine, Init(R, 15));
-  Insert(sOutEuro);
+  R.Assign(36, 3, 40, 4);
+  Insert(New(PStaticText, Init(R, 'RUB:')));
+  R.Assign(41, 3, 51, 4);
+  sOutRUB := New(PInputLine, Init(R, 15));
+  Insert(sOutRUB);
+  R.Assign(36, 5, 40, 6);
+  Insert(New(PStaticText, Init(R, 'USD:')));
+  R.Assign(41, 5, 51, 6);
+  sOutUSD := New(PInputLine, Init(R, 15));
+  Insert(sOutUSD);
+  R.Assign(36, 7, 40, 8);
+  Insert(New(PStaticText, Init(R, 'LBP:')));
+  R.Assign(41, 7, 51, 8);
+  sOutLBP := New(PInputLine, Init(R, 15));
+  Insert(sOutLBP);
   
-  R.Assign(18,12,29,14);
-  Insert(New(PButton, Init(R, 'Close', cmExit, bfNormal)));
-  R.Assign(18,9,29,11);
-  Insert(New(PButton, Init(R, 'Convert', cmConvert, bfNormal)));
+  R.Assign(16, 10, 27, 12);
+  Insert(New(PButton, Init(R, 'CONVERT', cmConvert, bfNormal)));
+  R.Assign(32, 10, 43, 12);
+  Insert(New(PButton, Init(R, 'CLOSE', cmExit, bfNormal)));
 end;
 
 procedure TTaskDialog.Action;
@@ -121,24 +121,24 @@ begin
   sIn^.GetData(s);
   x:=StrToFloat(s);
   
-  If (currency = 'Dollar')
+  If (currency = 'USD')
   then 
-    x:=x*Dollar
+    x:=x*USD
   else 
-    If (currency = 'Euro')
+    If (currency = 'LBP')
     then
-      x:=x*Euro;
+      x:=x*LBP;
   
   s:=FloatToStr(x);
-  sOutRub^.SetData(s);
+  sOutRUB^.SetData(s);
   
-  a:=x/Dollar;
+  a:=x/USD;
   s:=FloatToStr(a);
-  sOutDollar^.SetData(s);
+  sOutUSD^.SetData(s);
   
-  a:=x/Euro;
+  a:=x/LBP;
   s:=FloatToStr(a);
-  sOutEuro^.SetData(s);
+  sOutLBP^.SetData(s);
 end;
 
 end.

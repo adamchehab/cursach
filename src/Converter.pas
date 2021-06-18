@@ -3,10 +3,10 @@
 uses ModuleApp;
 
 var
-  Counter: TMyApp; 
+  Counverter: TMyApp; 
   
 begin
-  Counter.Init;
-  Counter.Run;
-  Counter.Done;
+  Counverter.Init;
+  Counverter.Run;
+  Counverter.Done;
 end.
