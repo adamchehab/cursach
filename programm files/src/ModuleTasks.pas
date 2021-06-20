@@ -11,7 +11,6 @@ const
   cmLBP =     1004;
   cmExit =    1005;
   
-  // курс валют (можно float)
   USD =  72.39;
   LBP =  0.047;
 
@@ -30,11 +29,10 @@ Implementation
 
 procedure TTaskDialog.HandleEvent(var Event : TEvent);
 begin
-  inherited HandleEvent(Event);   // обработка ст. команд
-  if Event.What = evCommand then  // обработка новых команд  , если какая то кнопка нажата
+  inherited HandleEvent(Event); 
+  if Event.What = evCommand then
   begin
     case Event.Command of
-      // задаем текущюю валюту
       cmRUB:      begin currency:='RUB'; sCurrency^.SetData(currency); end;
       cmUSD:      begin currency:='USD'; sCurrency^.SetData(currency); end;
       cmLBP:      begin currency:='LBP'; sCurrency^.SetData(currency); end;
@@ -49,12 +47,9 @@ constructor TTaskDialog.Init;
 var
   R : TRect;
 begin
-  // 4 числа тк 2 - коорд верхней левой точки
-  // куда вставляем
   R.Assign(15, 5, 73, 18);
-  // что мы вставляем
   inherited Init(R, 'CONVERTER');
-  // Зеленые кнопки слева создаем
+  
   R.Assign(6, 3, 15, 5);
   Insert(New(PButton, Init(R, 'RUB', cmRUB, bfNormal)));
   R.Assign(6, 5, 15, 7);
@@ -101,15 +96,15 @@ procedure TTaskDialog.Action;
 function FloatToStr(f : real) : string;
   var s : string;
   begin
-    Str(f:0:3, s);  // 3 знака после запятой
+    Str(f:0:3, s);
     FloatToStr := s;
   end;
   function StrToFloat(s : string) : real;
   var
     f : real;
-    Code : Integer; // рузультата операции 0 или 1
+    Code : Integer;
   begin
-    Val(s, f, Code);  // s что кладем, f - получаем
+    Val(s, f, Code);
     StrToFloat := f;
   end;
 

@@ -27,7 +27,6 @@ begin
   end;
 end;
 
-// создаем кнопки меню сверху (можно без него)
 procedure TMyApp.InitMenuBar;
 var R: TRect;
 begin
@@ -40,7 +39,6 @@ begin
   )));
 end;
 
-// создаем кнопки меню снизу
 procedure TMyApp.InitStatusLine;
 var R: TRect;
 begin
